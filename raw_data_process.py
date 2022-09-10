@@ -36,12 +36,20 @@ def txt_reader(txt_file,matrix_protein_dict):
     prot_psm_dict = defaultdict(list)
     prot_hyperscore = defaultdict(float)
     with open(txt_file,'r',newline='\r\n') as f_o:
+
         for line in f_o:
             line_split = line.split('\t')
-            psm,prot,hyper_score = line_split[0][2:-2],line_split[1].split('|')[1],float(line_split[-1])
-            if prot in matrix_protein_dict:  # only include matrix protein
-                prot_psm_dict[prot].append(psm)
-                prot_hyperscore[prot] += hyper_score
+            if ';' in line_split[1]:
+
+                prot_list = [each.split('|')[1] for each in line_split[1].split(';')]
+            else:
+
+                prot_list = [line_split[1].split('|')[1]]
+            psm,hyper_score = line_split[0][2:-2],float(line_split[-1])
+            for prot in prot_list:
+                if prot in matrix_protein_dict:  # only include matrix protein
+                    prot_psm_dict[prot].append(psm)
+                    prot_hyperscore[prot] += hyper_score
     return prot_psm_dict, prot_hyperscore
 
 
@@ -92,22 +100,29 @@ def table_assemble(txt_file,annontation_dict,protein_seq_dict,protein_info_dict,
     return df.to_csv(txt_file.replace('.txt','_summary.tsv'),sep='\t')
 
 
+if __name__=='__main__':
 
-base_path = 'F:/matrisomedb2.0/MDB2/result/'
-files = glob(base_path+'/**/*.txt',recursive=True)
-print (files[0])
+    base_path = 'F:/matrisomedb2.0/MDB2/result/'
+    files = glob(base_path+'/**/*.txt',recursive=True)
+    print (files[0])
 
-annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
-annotation_dict = {each.split('/')[-1]:annotation_dict[each] for each in annotation_dict}
-print ([k for k in annotation_dict.keys()])
-matrix_info_dict = json.load(open('F:/matrisomedb2.0/annotation/mat_dict.json'))
-protein_seq_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
-protein_info_dict = protein_info_from_fasta('F:/matrisomedb2.0/mat.fasta')
+    annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
+    for f in annotation_dict:
+        for each in annotation_dict[f]:
 
-for each_f in files:
-    try:
-        table_assemble(each_f,annotation_dict,protein_seq_dict,protein_info_dict,matrix_info_dict)
-    except KeyError:
-        print (f'{each_f} not in annotation file')
+            if annotation_dict[f][each][-1] == ' ':
+                print (annotation_dict[f][each])
+
+    # annotation_dict = {each.split('/')[-1]:annotation_dict[each] for each in annotation_dict}
+    # print ([k for k in annotation_dict.keys()])
+    # matrix_info_dict = json.load(open('F:/matrisomedb2.0/annotation/mat_dict.json'))
+    # protein_seq_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
+    # protein_info_dict = protein_info_from_fasta('F:/matrisomedb2.0/mat.fasta')
+    #
+    # for each_f in files:
+    #     try:
+    #         table_assemble(each_f,annotation_dict,protein_seq_dict,protein_info_dict,matrix_info_dict)
+    #     except KeyError:
+    #         print (f'{each_f} not in annotation file')
 
 
