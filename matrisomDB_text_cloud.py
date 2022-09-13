@@ -26,7 +26,7 @@ def get_freq_from_str(list_str:list):
     stop_pattern = 'we|are|We|Were|as|was|which|in|changes|change|identified|identify|using|Both|both|^a$|^A$|^the$|this|This|' \
                    'these|These|those|Those|one|an|The|to|To|^in$|In|for|of|or|by|with|is|on|that|be|from|here|^can$|^cannot$|\(|\)' \
                    '|yet|and|Objective|Results|results|result|Conclusions|Methods|methods|method|Background|Conclusions|Approach|have|Have|Had|Has|has|their|' \
-                   'Here|including|its|also|revealed|than|other|role|well|but|may|show|at|showed|compared|performed|biology|study|nor|By|Though|though'
+                   'despite|Here|including|its|also|revealed|than|other|role|well|but|may|show|at|showed|compared|performed|biology|study|nor|By|Though|though'
 
     for each_str in list_str:
         each_str_clean = each_str.replace('\n','').replace('.','').replace(',','').replace(':','').lstrip('').rstrip('')
@@ -69,13 +69,15 @@ def word_cloud_enrich(total_text_file, single_text_file):
 
 
 def textcloud_from_freq(freq_dict,output_png=None):
-    wc = WordCloud(background_color="white").generate_from_frequencies(freq_dict)
+    wc = WordCloud(background_color="white",width=1600, height=800).generate_from_frequencies(freq_dict)
+    plt.figure(figsize=(20, 10))
     plt.imshow(wc, interpolation='bilinear')
     plt.axis('off')
+    plt.tight_layout(pad=0)
     # plt.show()
     if output_png:
-        wc.to_file(output_png)
-
+        # wc.to_file(output_png)
+        plt.savefig(output_png)
 
 def get_abstract(rep_id_list:list,df):
 
@@ -117,6 +119,6 @@ if __name__=='__main__':
     # matrisomeDB2.0
 
     df = pd.read_excel(r'F:\matrisomedb2.0/Abstracts for Word Cloud.xlsx')
-    project_ids = ['PXD001765','PXD004060','PXD007700']
+    project_ids = ['MSV000082639']
 
-    gen_wordcloud_md2(project_ids,df,output_png='test.png')
+    gen_wordcloud_md2(project_ids,df,output_png='F:/matrisomedb2.0/statistics/MSV000082639.png')

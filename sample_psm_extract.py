@@ -81,17 +81,38 @@ def txt_all_psms(txt_file_list):
     return psm_list
 
 
+def all_matrix_psms(txt_file_list,matrix_protein_dict):
+    psm_count = 0
+    for txt_file in txt_file_list:
+        print(txt_file)
+        with open(txt_file, 'r', newline='\r\n') as f_o:
+
+            for line in f_o:
+                line_split = line.split('\t')
+
+                if ';' in line_split[1]:
+
+                    prot_list = [each.split('|')[1] for each in line_split[1].split(';')]
+                else:
+
+                    prot_list = [line_split[1].split('|')[1]]
+                for prot in prot_list:
+                    if prot in matrix_protein_dict:
+                        psm_count+=1
+                        break
+
+    return psm_count
 
 if __name__=="__main__":
     import pickle
     # protein_seq_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
     # annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
     # sample_type_files_dict = defaultdict(set)
-    base_path = 'F:/matrisomedb2.0/MDB2/result/'
+    # base_path = 'F:/matrisomedb2.0/MDB2/result/'
     #
-    files = glob(base_path + '/**/*.txt', recursive=True)
-    psm_list = txt_all_psms(files)
-    pickle.dump(psm_list,open('F:/matrisomedb2.0/all_psm.p','wb'),protocol=5)
+    # files = glob(base_path + '/**/*.txt', recursive=True)
+    # psm_list = txt_all_psms(files)
+    # pickle.dump(psm_list,open('F:/matrisomedb2.0/all_psm.p','wb'),protocol=5)
     # all_prot_psm_dict = txt_reader_all(files,protein_seq_dict)
 
 
@@ -117,3 +138,4 @@ if __name__=="__main__":
 
     # all_prot_psm_dict = json.load(open('F:/matrisomedb2.0/global_protein_psm.dict.json','r'))
     # print (len(all_prot_psm_dict['P02751']))
+
