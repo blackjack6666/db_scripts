@@ -147,24 +147,27 @@ ecm_class_color_dict = {"Collagens": '#0584B7', 'ECM-affiliated Proteins':'#F465
                         'ECM Regulators':"#F9A287","Secreted Factors":"#FFE188",
                         "ECM Glycoproteins":"#13349D", "Proteoglycans":"#59D8E6"}
 
-# matrisome_df = pd.read_excel('D:/data/Naba_deep_matrisome/matrisome coverage_norepeat.xlsx')
-matrisome_df = pd.read_csv('F:/matrisomedb2.0/statistics/glob_seq_coverage.tsv',sep='\t')
+md1_df = pd.read_excel('D:/data/Naba_deep_matrisome/matrisome coverage_norepeat.xlsx')
+md2_df = pd.read_csv('F:/matrisomedb2.0/statistics/glob_seq_coverage.tsv',sep='\t')
 
 fig,axs = plt.subplots(2,3,figsize=(10,5))
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 for each, ax in zip(sort_category,[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2]]):
     color = ecm_class_color_dict[each]
-    sub_df = matrisome_df[matrisome_df['Sub']==each]
-    # ave_cov = sub_df['cov'].mean()*100
-    ave_cov = sub_df['Sequence coverage'].mean()
-    text = 'Ave Cov:\n%.2f%%' % ave_cov
-    # axs[ax[0],ax[1]].hist(sub_df['cov']*100,50,color=color)
-    axs[ax[0], ax[1]].hist(sub_df['Sequence coverage'], 50, color=color)
-    axs[ax[0],ax[1]].text(0.75, 0.95, text, transform=axs[ax[0],ax[1]].transAxes, fontsize=8,
-        verticalalignment='top', bbox=props)
+    md1_sub_df = md1_df[md1_df['category']==each]
+    md2_sub_df = md2_df[md2_df['Sub']==each]
+
+    ave_cov_md1 = md1_sub_df['cov'].mean()*100
+    ave_cov_md2 = md2_sub_df['Sequence coverage'].mean()
+    text = 'Ave Cov in MD1: %.2f%%\nAve Cov in MD2: %.2f%%' % (ave_cov_md1, ave_cov_md2)
+
+    axs[ax[0],ax[1]].hist(md1_sub_df['cov']*100,50,color=color, alpha=0.5)
+    axs[ax[0],ax[1]].hist(md2_sub_df['Sequence coverage'], 50, color=color)
+    # axs[ax[0],ax[1]].text(0.75, 0.95, text, transform=axs[ax[0],ax[1]].transAxes, fontsize=8,
+    #     verticalalignment='top', bbox=props)
     axs[ax[0],ax[1]].set_xlabel(each+' coverage')
     axs[ax[0],ax[1]].set_ylabel('Frequency')
 
 plt.tight_layout()
-plt.savefig('F:/matrisomedb2.0/statistics/MD2_ave_cov.png', dpi=300)
+# plt.savefig('F:/matrisomedb2.0/statistics/MD2_ave_cov.png', dpi=300)
 plt.show()

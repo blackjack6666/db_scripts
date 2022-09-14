@@ -53,6 +53,27 @@ def txt_reader(txt_file,matrix_protein_dict):
     return prot_psm_dict, prot_hyperscore
 
 
+def psm_species_counter(text_file_list, protein_info_dict,gene_species_dict):
+    species_psm_count = defaultdict(int)
+    for text_file in text_file_list:
+        print(text_file)
+        with open(text_file, 'r', newline='\r\n') as f_o:
+
+            for line in f_o:
+                line_split = line.split('\t')
+                if ';' in line_split[1]:
+
+                    prot_list = [each.split('|')[1] for each in line_split[1].split(';')]
+                else:
+
+                    prot_list = [line_split[1].split('|')[1]]
+                for prot in prot_list:
+                    if prot in protein_info_dict:
+                        species = gene_species_dict[protein_info_dict[prot][0]]
+                        species_psm_count[species]+=1
+    return species_psm_count
+
+
 def nsaf(prot_psm_dict,protein_seq_dict):
 
     nsaf_dict = {}
@@ -73,7 +94,7 @@ def table_assemble(txt_file,annontation_dict,protein_seq_dict,protein_info_dict,
                "note","total_psm","hyperscore_sum","NSAF","seq_cov_file"]
 
     raw_file = txt_file.split('\\')[-1].replace('.txt','.raw')
-    if raw_file not in annotation_dict:
+    if raw_file not in annontation_dict:
         raw_file = txt_file.split('\\')[-1].replace('.txt','.RAW')
     annotation_sub_dict = annontation_dict[raw_file]
 
@@ -104,20 +125,25 @@ if __name__=='__main__':
 
     base_path = 'F:/matrisomedb2.0/MDB2/result/'
     files = glob(base_path+'/**/*.txt',recursive=True)
-    print (files[0])
 
-    annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
-    for f in annotation_dict:
-        for each in annotation_dict[f]:
+    matrix_info_dict = json.load(open('F:/matrisomedb2.0/annotation/mat_dict.json'))
+    protein_info_dict = protein_info_from_fasta('F:/matrisomedb2.0/mat.fasta')
+    gene_species_dict = {gene:matrix_info_dict[gene]['Species'] for gene in matrix_info_dict}
 
-            if annotation_dict[f][each][-1] == ' ':
-                print (annotation_dict[f][each])
+    print (psm_species_counter(files,protein_info_dict,gene_species_dict))
+
+    # annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
+    # for f in annotation_dict:
+    #     for each in annotation_dict[f]:
+    #
+    #         if annotation_dict[f][each][-1] == ' ':
+    #             print (annotation_dict[f][each])
 
     # annotation_dict = {each.split('/')[-1]:annotation_dict[each] for each in annotation_dict}
     # print ([k for k in annotation_dict.keys()])
-    # matrix_info_dict = json.load(open('F:/matrisomedb2.0/annotation/mat_dict.json'))
+
     # protein_seq_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
-    # protein_info_dict = protein_info_from_fasta('F:/matrisomedb2.0/mat.fasta')
+
     #
     # for each_f in files:
     #     try:

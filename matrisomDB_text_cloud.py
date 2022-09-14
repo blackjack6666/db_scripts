@@ -23,10 +23,13 @@ def get_freq_from_str(list_str:list):
     import re
     # multiple strings
     word_freq_dict = defaultdict(int)
-    stop_pattern = 'we|are|We|Were|as|was|which|in|changes|change|identified|identify|using|Both|both|^a$|^A$|^the$|this|This|' \
-                   'these|These|those|Those|one|an|The|to|To|^in$|In|for|of|or|by|with|is|on|that|be|from|here|^can$|^cannot$|\(|\)' \
+    stop_pattern = 'as|if|long|much|soon|though|because|before|by the time|even if|in case|in order that|in the event that|least|only|only if|provided|' \
+                   'that|once|after|After|we|are|We|Were|as|was|which|in|changes|change|identified|identify|using|Both|both|^a$|^A$|^the$|^\d{1}|this|This|' \
+                   'these|These|those|Those|one|an|The|to|To|^in$|In|for|For|of|or|by|with|is|on|On|that|be|from|here|^can$|^cannot$|\(|\)' \
                    '|yet|and|Objective|Results|results|result|Conclusions|Methods|methods|method|Background|Conclusions|Approach|have|Have|Had|Has|has|their|' \
-                   'despite|Here|including|its|also|revealed|than|other|role|well|but|may|show|at|showed|compared|performed|biology|study|nor|By|Though|though'
+                   'despite|Here|including|its|also|revealed|than|other|role|well|but|may|show|at|showed|compared|until|' \
+                   'performed|biology|study|nor|By|Though|though|Furthermore|challenging|although|since|Since|supposing|till|' \
+                   'when|whenever|where|whereas|wherever|whether or not|while|unless|group|Group|further|Further|rather|finally|Finally|studies'
 
     for each_str in list_str:
         each_str_clean = each_str.replace('\n','').replace('.','').replace(',','').replace(':','').lstrip('').rstrip('')
@@ -35,7 +38,10 @@ def get_freq_from_str(list_str:list):
             if re.match(stop_pattern, word):
                 continue
             else:
-                word_freq_dict[word] += 1
+                if len(word)>1:
+                    word = re.sub(r'\>|\<|\(|\)|\"','',word)
+                    word_freq_dict[word] += 1
+
     return word_freq_dict
 
 
@@ -119,6 +125,6 @@ if __name__=='__main__':
     # matrisomeDB2.0
 
     df = pd.read_excel(r'F:\matrisomedb2.0/Abstracts for Word Cloud.xlsx')
-    project_ids = ['MSV000082639']
+    project_ids = ['PXD005130','MSV000082639','PXD020187']
 
-    gen_wordcloud_md2(project_ids,df,output_png='F:/matrisomedb2.0/statistics/MSV000082639.png')
+    gen_wordcloud_md2(project_ids,df,output_png='F:/matrisomedb2.0/statistics/3projects_edit.png')
