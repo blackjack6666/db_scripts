@@ -107,12 +107,12 @@ def gen_wordcloud_md2(rep_id_list:list, df, output_png='test.png'):
     normalized_total = {w: word_freq_total[w] / sum_total for w in word_freq_total}
 
     sum_single = sum([v for v in word_freq_subset.values()])
-    normalized_single = {w: word_freq_subset[w] / sum_single for w in word_freq_subset}
+    normalized_single = {w: word_freq_subset[w] / sum_single for w in word_freq_subset} # delete word that only shows once
 
     for w in normalized_single:
         # if w in normalized_total:
         enrich_freq_dict[w] = (normalized_single[w] - normalized_total[w]) / normalized_total[w] * 100
-
+    print ('enrichment score:',sorted(enrich_freq_dict.items(), key=lambda x: x[1],reverse=True))
     textcloud_from_freq(enrich_freq_dict,output_png=output_png)
     return output_png
 
@@ -127,4 +127,4 @@ if __name__=='__main__':
     df = pd.read_excel(r'F:\matrisomedb2.0/Abstracts for Word Cloud.xlsx')
     project_ids = ['PXD005130','MSV000082639','PXD020187']
 
-    gen_wordcloud_md2(project_ids,df,output_png='F:/matrisomedb2.0/statistics/3projects_edit.png')
+    gen_wordcloud_md2(project_ids,df,output_png='F:/matrisomedb2.0/statistics/3projects_0914_1.png')
