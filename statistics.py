@@ -126,32 +126,37 @@ print (all_matrix_psms(files,matrix_protein_dict))
 # plt.show()
 
 ## seq coverage each sample
-"""
+
 data = []
 sample_data = pickle.load(open('F:/matrisomedb2.0/sample.data','rb'))
 for sample in sample_data:
     id_freq_array = sample_data[sample]['freq']
-    sned1_freq = id_freq_array['Q8TER0']
-    seq_cov = np.count_nonzero(sned1_freq)/len(matrix_protein_dict['Q8TER0'])*100
-    print (sample, seq_cov)
-    data.append([sample,seq_cov])
+    # sned1_freq = id_freq_array['Q8TER0']
+    # seq_cov = np.count_nonzero(sned1_freq)/len(matrix_protein_dict['Q8TER0'])*100
+    # print (sample, seq_cov)
+    seq_cov = sum([np.count_nonzero(id_freq_array[prot])/len(matrix_protein_dict[prot])*100 for prot in id_freq_array])/len(id_freq_array)
 
-df_sned1 = pd.DataFrame(data,columns=['sample types', 'Q8TER0_sequence_cov'])
-df_sned1.to_csv('F:/matrisomedb2.0/Q8TER0_seq_cov.tsv', sep='\t')
-"""
+    data.append([sample,seq_cov])
+    print (sample)
+# df_sned1 = pd.DataFrame(data,columns=['sample types', 'Q8TER0_sequence_cov'])
+# df_sned1.to_csv('F:/matrisomedb2.0/Q8TER0_seq_cov.tsv', sep='\t')
+
+df = pd.DataFrame(data,columns=['sample types', 'average seq cov%'])
+df.to_csv('F:/matrisomedb2.0/statistics/sample_seq_cov.tsv',sep='\t')
 
 ## seq covearage histogram
-sort_category = ["ECM Glycoproteins","Collagens","Proteoglycans","ECM-affiliated Proteins","ECM Regulators",
-                  "Secreted Factors"]
-ecm_class_color_dict = {"Collagens": '#0584B7', 'ECM-affiliated Proteins':'#F4651E',
-                        'ECM Regulators':"#F9A287","Secreted Factors":"#FFE188",
-                        "ECM Glycoproteins":"#13349D", "Proteoglycans":"#59D8E6"}
+# sort_category = ["ECM Glycoproteins","Collagens","Proteoglycans","ECM-affiliated Proteins","ECM Regulators",
+#                   "Secreted Factors"]
+# ecm_class_color_dict = {"Collagens": '#0584B7', 'ECM-affiliated Proteins':'#F4651E',
+#                         'ECM Regulators':"#F9A287","Secreted Factors":"#FFE188",
+#                         "ECM Glycoproteins":"#13349D", "Proteoglycans":"#59D8E6"}
 
-md1_df = pd.read_excel('D:/data/Naba_deep_matrisome/matrisome coverage_norepeat.xlsx')
-md2_df = pd.read_csv('F:/matrisomedb2.0/statistics/glob_seq_coverage.tsv',sep='\t')
+# md1_df = pd.read_excel('D:/data/Naba_deep_matrisome/matrisome coverage_norepeat.xlsx')
+# md2_df = pd.read_csv('F:/matrisomedb2.0/statistics/glob_seq_coverage.tsv',sep='\t')
 
 # fig,axs = plt.subplots(2,3,figsize=(10,5))
-props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+# props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+
 ## each category
 # for each, ax in zip(sort_category,[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2]]):
 #     color = ecm_class_color_dict[each]
@@ -174,6 +179,7 @@ props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 # plt.show()
 
 ## overall ECM proteins
+"""
 fig,axs = plt.subplots(figsize=(6,6))
 md1_ave_cov = md1_df['cov'].mean()*100
 md2_ave_cov = md2_df['Sequence coverage'].mean()
@@ -187,3 +193,4 @@ plt.xlabel('Sequence Coverage in MD1 and MD2')
 plt.tight_layout()
 plt.savefig('F:/matrisomedb2.0/statistics/all_seq_cov.png', dpi=300)
 # plt.show()
+"""
