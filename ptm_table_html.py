@@ -32,7 +32,8 @@ def ptm_table_global(id_ptm_idx_dict,output_base):
             for ind in ptm_ind_dict[ptm]:
                 html_content+='<tr><td>'+str(ind+1)+'</td><td>'+aa+'</td><td>'+ptm_name+'</td></tr>'
         f = open(output_base+prot+'_ptmtable.html','w')
-        f.write(html_header+html_content+html_tail)
+        # add parameter to js function export2csv() to define output csv file name
+        f.write(html_header.replace("export2csv()","export2csv('"+prot+"')")+html_content+html_tail)
         f.close()
 
 
@@ -53,8 +54,10 @@ def ptm_table_sample(sample_data, output_base):
                 ptm_name = ptm_map_dict[ptm]
                 for ind in prot_ptm_dict[prot][ptm]:
                     html_content += '<tr><td>' + str(ind + 1) + '</td><td>' + aa + '</td><td>' + ptm_name + '</td></tr>'
-            f = open(output_base + sample + '_' + prot + '_ptmtable.html', 'w')
-            f.write(html_header + html_content + html_tail)
+            f_prefix = sample + '_' + prot
+            f = open(output_base + f_prefix + '_ptmtable.html', 'w')
+            # pass f_prefix to js function export2csv() parameter to define output file name
+            f.write(html_header.replace("export2csv()","export2csv('"+f_prefix+"')") + html_content + html_tail)
             f.close()
 
 
@@ -64,9 +67,9 @@ if __name__=='__main__':
     outbase = 'F:/matrisomedb2.0/ptm_table_revise/'
 
     ### glob ptm table
-    # glob_ptm_map = pickle.load(open('F:/matrisomedb2.0/glob_prot_ptm_ind_dict.p', 'rb'))
-    # ptm_table_global(glob_ptm_map,output_base=outbase)
+    glob_ptm_map = pickle.load(open('F:/matrisomedb2.0/glob_prot_ptm_ind_dict.p', 'rb'))
+    ptm_table_global(glob_ptm_map,output_base=outbase)
 
     ### sample ptm table
-    sample_data = pickle.load(open('F:\matrisomedb2.0/sample.data','rb'))
-    ptm_table_sample(sample_data,output_base=outbase)
+    # sample_data = pickle.load(open('F:\matrisomedb2.0/sample.data','rb'))
+    # ptm_table_sample(sample_data,output_base=outbase)
