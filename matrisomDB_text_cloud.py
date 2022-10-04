@@ -45,6 +45,38 @@ def get_freq_from_str(list_str:list):
     return word_freq_dict
 
 
+def get_freq_str2(list_str:list):
+    from collections import defaultdict
+    import re
+    # multiple strings
+    word_freq_dict = defaultdict(int)
+    stop_pattern = 'as|if|long|much|soon|though|because|before|by the time|even if|in case|in order that|in the event that|least|only|only if|provided|' \
+                   'that|once|after|After|we|are|We|Were|as|was|which|in|changes|change|identified|identify|using|Both|both|^a$|^A$|^the$|^\d{1}|this|This|' \
+                   'these|These|those|Those|one|an|The|to|To|^in$|In|for|For|of|or|by|with|is|on|On|that|be|from|here|^can$|^cannot$|\(|\)' \
+                   '|yet|and|Objective|Results|results|result|Conclusions|Methods|methods|method|Background|Conclusions|Approach|have|Have|Had|Has|has|their|' \
+                   'despite|Here|including|its|also|revealed|than|other|role|well|but|may|show|at|showed|compared|until|' \
+                   'performed|biology|study|nor|By|Though|though|Furthermore|challenging|although|since|Since|supposing|till|' \
+                   'when|whenever|where|whereas|wherever|whether or not|while|unless|group|Group|further|Further|rather|finally|Finally|studies'
+
+    for each_str in list_str:
+        each_str_clean = each_str.replace('\n', '').replace('.', '').replace(',', '').replace(':', '').lstrip(
+            '').rstrip('')
+        str_split = each_str_clean.split(" ")
+        for word in str_split:
+            word = word.replace('_','-')
+            if re.match(stop_pattern, word):
+                continue
+            else:
+                if len(word) > 1:
+                    word = re.sub(r'\>|\<|\(|\)|\"|\;', '', word)
+                    word_freq_dict[word] += 1
+    for w in list(word_freq_dict):
+        if word_freq_dict[w]==1:
+            # word_freq_dict.pop(w)
+            print (w)
+    return word_freq_dict
+
+
 def word_cloud_enrich(total_text_file, single_text_file):
     """
     -----
@@ -80,20 +112,23 @@ def textcloud_from_freq(freq_dict,output_png=None):
     plt.imshow(wc, interpolation='bilinear')
     plt.axis('off')
     plt.tight_layout(pad=0)
-    # plt.show()
+    plt.show()
     if output_png:
         # wc.to_file(output_png)
         plt.savefig(output_png)
+
 
 def get_abstract(rep_id_list:list,df):
 
     df_slice = df[df.PXD.isin(rep_id_list)]
     projectid_abstract_dict = {projectid:abstract for projectid, abstract in zip(df_slice['PXD'],df_slice['Abstract'])}
     str_list_subset = [v for v in projectid_abstract_dict.values()]
-    word_freq_subset = get_freq_from_str(str_list_subset)
-
+    # word_freq_subset = get_freq_from_str(str_list_subset)
+    word_freq_subset = get_freq_str2(str_list_subset)
     str_list_total = df['Abstract'].tolist()
-    word_freq_total = get_freq_from_str(str_list_total)
+
+    # word_freq_total = get_freq_from_str(str_list_total)
+    word_freq_total = get_freq_str2(str_list_total)
 
     return word_freq_subset, word_freq_total
 
@@ -124,7 +159,13 @@ if __name__=='__main__':
 
     # matrisomeDB2.0
 
-    df = pd.read_excel(r'F:\matrisomedb2.0/Abstracts for Word Cloud.xlsx')
-    project_ids = ['PXD005130','MSV000082639','PXD020187']
+    # df = pd.read_excel(r'F:\matrisomedb2.0/Abstracts for Word Cloud.xlsx')
+    df = pd.read_excel(r'C:\Users\gao lab computer\Downloads/wc_clean.xlsx')
+    project_ids = ['PXD020187','PXD018951']
 
-    gen_wordcloud_md2(project_ids,df,output_png='F:/matrisomedb2.0/statistics/3projects_0914_1.png')
+    gen_wordcloud_md2(project_ids,df)
+
+
+    # list_str = df['Abstract'].tolist()
+    # word_freq = get_freq_str2(list_str)
+    # print (word_freq)
