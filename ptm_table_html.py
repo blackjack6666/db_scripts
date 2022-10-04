@@ -1,5 +1,5 @@
 """
-output PTM table in html, including download CSV button at the front
+output PTM table in html, including download CSV button at the front, in addition, need sortable.css, sortable.js, and js/js_downloadbutton.js
 """
 
 ptm_map_dict = {'Q\\[129\\]':'Gln deamidation','N\\[115\\]':'ASN deamidation',
