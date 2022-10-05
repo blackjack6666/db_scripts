@@ -2,9 +2,10 @@ import sqlite3
 import glob
 import os
 import pandas as pd
-result_dir = r'F:/matrisomedb2.0/MDB2/result/'
+# result_dir = r'F:/matrisomedb2.0/MDB2/result/'
+result_dir = r'F:/matrisomedb2_0_revise/result8/'
 result_files = glob.glob(os.path.join(result_dir, "**/*_summary.tsv"), recursive=True)
-con = sqlite3.connect("matrisome_db4.db")
+con = sqlite3.connect("matrisome_db_1004.db")
 cur = con.cursor()
 # no need to modify this line
 cur.execute("CREATE TABLE IF NOT EXISTS protein_info (ID INTEGER PRIMARY KEY AUTOINCREMENT, uniprot_id CHAR, gene_name CHAR, species CHAR, category CHAR, tissue CHAR, organ_system CHAR, tissue_class CHAR, sample_type CHAR, data_source CHAR, repository_id CHAR, matrisome_category CHAR, matrisome_class CHAR, file_name CHAR, reference CHAR, description CHAR, note CHAR, total_psm INT, hyperscore_sum DOUBLE, seq_cov_file CHAR, NSAF DOUBLE);")

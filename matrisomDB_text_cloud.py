@@ -52,10 +52,10 @@ def get_freq_str2(list_str:list):
     word_freq_dict = defaultdict(int)
     stop_pattern = 'as|if|long|much|soon|though|because|before|by the time|even if|in case|in order that|in the event that|least|only|only if|provided|' \
                    'that|once|after|After|we|are|We|Were|as|was|which|in|changes|change|identified|identify|using|Both|both|^a$|^A$|^the$|^\d{1}|this|This|' \
-                   'these|These|those|Those|one|an|The|to|To|^in$|In|for|For|of|or|by|with|is|on|On|that|be|from|here|^can$|^cannot$|\(|\)' \
+                   'these|These|those|Those|one|an|The|to|To|^in$|In|for|For|of|or|by|with|is|on|On|that|be|from|here|^can$|^cannot$|.*ly$|\(|\)' \
                    '|yet|and|Objective|Results|results|result|Conclusions|Methods|methods|method|Background|Conclusions|Approach|have|Have|Had|Has|has|their|' \
                    'despite|Here|including|its|also|revealed|than|other|role|well|but|may|show|at|showed|compared|until|' \
-                   'performed|biology|study|nor|By|Though|though|Furthermore|challenging|although|since|Since|supposing|till|' \
+                   'performed|biology|study|nor|By|Though|though|Furthermore|challenging|although|since|Since|supposing|till|However|however|' \
                    'when|whenever|where|whereas|wherever|whether or not|while|unless|group|Group|further|Further|rather|finally|Finally|studies'
 
     for each_str in list_str:
@@ -70,10 +70,10 @@ def get_freq_str2(list_str:list):
                 if len(word) > 1:
                     word = re.sub(r'\>|\<|\(|\)|\"|\;', '', word)
                     word_freq_dict[word] += 1
-    for w in list(word_freq_dict):
-        if word_freq_dict[w]==1:
+    # for w in list(word_freq_dict):
+    #     if word_freq_dict[w]==1:
             # word_freq_dict.pop(w)
-            print (w)
+            # print (w)
     return word_freq_dict
 
 
@@ -160,8 +160,8 @@ if __name__=='__main__':
     # matrisomeDB2.0
 
     # df = pd.read_excel(r'F:\matrisomedb2.0/Abstracts for Word Cloud.xlsx')
-    df = pd.read_excel(r'C:\Users\gao lab computer\Downloads/wc_clean.xlsx')
-    project_ids = ['PXD020187','PXD018951']
+    df = pd.read_excel(r'C:\Users\gao lab computer\Downloads/wc_clean (1).xlsx')
+    project_ids = ['MSV000080124','MSV000078535']
 
     gen_wordcloud_md2(project_ids,df)
 

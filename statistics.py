@@ -15,8 +15,8 @@ protein_info_dict = protein_info_from_fasta('F:/matrisomedb2.0/mat.fasta')
 matrix_protein_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
 gene_prot_dict = {protein_info_dict[prot][0]:prot for prot in protein_info_dict}
 
-"""
-global_prot_freq_dict = pickle.load(open('F:/matrisomedb2.0/glob_prot_freq_dict.p','rb'))
+
+global_prot_freq_dict = pickle.load(open('F:/matrisomedb2_0_revise/glob_prot_freq_dict_result9.p','rb'))
 
 df = pd.DataFrame(index=[k for k in global_prot_freq_dict.keys()],columns=['Gene','Species','Category','Sub','Sequence coverage'])
 for prot in global_prot_freq_dict:
@@ -30,8 +30,7 @@ for prot in global_prot_freq_dict:
     df.loc[prot, 'Category'] = cate
     df.loc[prot, 'Sub'] = sub_cate
     df.loc[prot, 'Sequence coverage'] = seq_cov
-df.to_csv('F:/matrisomedb2.0/statistics/glob_seq_coverage_1.tsv', sep='\t')
-"""
+df.to_csv('F:/matrisomedb2_0_revise/statistics/glob_seq_coverage_result9.tsv', sep='\t')
 
 # gene numbers each category
 """
@@ -126,7 +125,7 @@ print (all_matrix_psms(files,matrix_protein_dict))
 # plt.show()
 
 ## seq coverage each sample
-
+"""
 data = []
 sample_data = pickle.load(open('F:/matrisomedb2.0/sample.data','rb'))
 for sample in sample_data:
@@ -143,7 +142,7 @@ for sample in sample_data:
 
 df = pd.DataFrame(data,columns=['sample types', 'average seq cov%'])
 df.to_csv('F:/matrisomedb2.0/statistics/sample_seq_cov.tsv',sep='\t')
-
+"""
 ## seq covearage histogram
 # sort_category = ["ECM Glycoproteins","Collagens","Proteoglycans","ECM-affiliated Proteins","ECM Regulators",
 #                   "Secreted Factors"]

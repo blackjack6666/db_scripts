@@ -2,6 +2,7 @@
 output PTM table in html, including download CSV button at the front, in addition, need sortable.css, sortable.js, and js/js_downloadbutton.js
 """
 
+
 ptm_map_dict = {'Q\\[129\\]':'Gln deamidation','N\\[115\\]':'ASN deamidation',
                 'Q\\[111\\]':'Gln to pyroGln','C\\[143\\]':'selenocysteine',
                 'M\\[15\\.9949\\]':'Met oxidation','P\\[15\\.9949\\]':'Pro hydroxylation',
@@ -23,7 +24,6 @@ def ptm_table_global(id_ptm_idx_dict,output_base):
 
     for prot in id_ptm_idx_dict:
         html_content = '<tbody>'
-
         print (prot)
         ptm_ind_dict = id_ptm_idx_dict[prot]
         for ptm in ptm_ind_dict:
@@ -44,32 +44,37 @@ def ptm_table_sample(sample_data, output_base):
     :param output_base:
     :return:
     """
+    import os
     for sample in sample_data:
+        print (sample)
         prot_ptm_dict = sample_data[sample]['ptm']
         for prot in prot_ptm_dict:
-            print (prot)
+            # print (prot)
+            f_prefix = sample.replace('/', '_').replace('\u0394','') + '_' + prot  # replace illegal charac
+
             html_content = '<tbody>'
             for ptm in prot_ptm_dict[prot]:
                 aa = ptm[0]
                 ptm_name = ptm_map_dict[ptm]
                 for ind in prot_ptm_dict[prot][ptm]:
                     html_content += '<tr><td>' + str(ind + 1) + '</td><td>' + aa + '</td><td>' + ptm_name + '</td></tr>'
-            f_prefix = sample + '_' + prot
+
             f = open(output_base + f_prefix + '_ptmtable.html', 'w')
             # pass f_prefix to js function export2csv() parameter to define output file name
-            f.write(html_header.replace("export2csv()","export2csv('"+f_prefix+"')") + html_content + html_tail)
+            f.write(html_header.replace("export2csv()", "export2csv('" + f_prefix + "')") + html_content + html_tail)
             f.close()
+
 
 
 if __name__=='__main__':
     import pickle
 
-    outbase = 'F:/matrisomedb2.0/ptm_table_revise/'
+    outbase = 'F:/matrisomedb2_0_revise/ptm_table_revise1/'
 
     ### glob ptm table
-    glob_ptm_map = pickle.load(open('F:/matrisomedb2.0/glob_prot_ptm_ind_dict.p', 'rb'))
-    ptm_table_global(glob_ptm_map,output_base=outbase)
+    # glob_ptm_map = pickle.load(open('F:/matrisomedb2.0/glob_prot_ptm_ind_dict.p', 'rb'))
+    # ptm_table_global(glob_ptm_map,output_base=outbase)
 
     ### sample ptm table
-    # sample_data = pickle.load(open('F:\matrisomedb2.0/sample.data','rb'))
-    # ptm_table_sample(sample_data,output_base=outbase)
+    sample_data = pickle.load(open('F:/matrisomedb2_0_revise/sample_result9.data','rb'))
+    ptm_table_sample(sample_data,output_base=outbase)

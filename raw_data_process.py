@@ -123,32 +123,33 @@ def table_assemble(txt_file,annontation_dict,protein_seq_dict,protein_info_dict,
 
 if __name__=='__main__':
 
-    base_path = 'F:/matrisomedb2.0/MDB2/result/'
+    # base_path = 'F:/matrisomedb2.0/MDB2/result/'
+    base_path = 'F:/matrisomedb2_0_revise/result8/'
     files = glob(base_path+'/**/*.txt',recursive=True)
 
     matrix_info_dict = json.load(open('F:/matrisomedb2.0/annotation/mat_dict.json'))
     protein_info_dict = protein_info_from_fasta('F:/matrisomedb2.0/mat.fasta')
     gene_species_dict = {gene:matrix_info_dict[gene]['Species'] for gene in matrix_info_dict}
+    #
+    # print (psm_species_counter(files,protein_info_dict,gene_species_dict))
 
-    print (psm_species_counter(files,protein_info_dict,gene_species_dict))
-
-    # annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
+    annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
     # for f in annotation_dict:
     #     for each in annotation_dict[f]:
     #
     #         if annotation_dict[f][each][-1] == ' ':
     #             print (annotation_dict[f][each])
 
-    # annotation_dict = {each.split('/')[-1]:annotation_dict[each] for each in annotation_dict}
+    annotation_dict = {each.split('/')[-1]:annotation_dict[each] for each in annotation_dict}
     # print ([k for k in annotation_dict.keys()])
 
-    # protein_seq_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
+    protein_seq_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
 
     #
-    # for each_f in files:
-    #     try:
-    #         table_assemble(each_f,annotation_dict,protein_seq_dict,protein_info_dict,matrix_info_dict)
-    #     except KeyError:
-    #         print (f'{each_f} not in annotation file')
+    for each_f in files:
+        try:
+            table_assemble(each_f,annotation_dict,protein_seq_dict,protein_info_dict,matrix_info_dict)
+        except KeyError:
+            print (f'{each_f} not in annotation file')
 
 

@@ -2,13 +2,13 @@
 import sqlite3
 import pandas as pd
 
-connection = sqlite3.connect("matrisome_db3.db")
+connection = sqlite3.connect("matrisome_db_1004.db")
 # df = pd.read_sql_query("SELECT * FROM protein_info LIMIT 50000", connection)
 df = pd.read_sql_query("SELECT * FROM protein_info WHERE gene_name ='Col1a1'",connection)
 # print(df.iloc[0], df.columns
 print (df.shape)
 print (df.columns)
-# print (df.iloc[10,:])
+print (df.iloc[10,:])
 
 selected = df[df['sample_type']=='Pancreatic Ductal Adenocarcinoma Xenograft (BxPC3)']
 print (selected['reference'].tolist())

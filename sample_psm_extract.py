@@ -45,7 +45,7 @@ def text_file_reader(sample_type_files_dict,base_path,matrix_protein_dict):
                 continue
 
         sample_protein_psm_dict[sample] = prot_psm_dict
-    return json.dump(sample_protein_psm_dict,open('F:/matrisomedb2.0/sample_protein_psm_dict_3.json','w'))
+    return json.dump(sample_protein_psm_dict,open('F:/matrisomedb2_0_revise/sample_protein_psm_dict_result9.json','w'))
 
 
 def txt_reader_all(txt_file_list,matrix_protein_dict):
@@ -103,28 +103,31 @@ def all_matrix_psms(txt_file_list,matrix_protein_dict):
 
     return psm_count
 
+
 if __name__=="__main__":
     import pickle
-    # protein_seq_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
-    # annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
-    # sample_type_files_dict = defaultdict(set)
+    protein_seq_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
+    annotation_dict = json.load(open('F:/matrisomedb2.0/annotation/matdb_dict.json'))
+    sample_type_files_dict = defaultdict(set)
     # base_path = 'F:/matrisomedb2.0/MDB2/result/'
-    #
-    # files = glob(base_path + '/**/*.txt', recursive=True)
+    base_path = 'F:/matrisomedb2_0_revise/result9/'  # revision
+    files = glob(base_path + '/**/*.txt', recursive=True)
     # psm_list = txt_all_psms(files)
-    # pickle.dump(psm_list,open('F:/matrisomedb2.0/all_psm.p','wb'),protocol=5)
+    # print (len(psm_list))
+    # pickle.dump(psm_list,open('F:/matrisomedb2_0_revise/all_psm_result9.p','wb'),protocol=5)
     # all_prot_psm_dict = txt_reader_all(files,protein_seq_dict)
 
-
-    # for f_path in annotation_dict:
-    #     if '.RAW' in f_path:
-    #         txt_file = f_path.replace('.RAW','.txt')
-    #     else:
-    #         txt_file = f_path.replace('.raw','.txt')
-    #     sample_type = annotation_dict[f_path]["Description"]
-    #     sample_type_files_dict[sample_type].add(txt_file.split('/')[-1])
+    for f_path in annotation_dict:
+        if '.RAW' in f_path:
+            txt_file = f_path.replace('.RAW','.txt')
+        else:
+            txt_file = f_path.replace('.raw','.txt')
+        sample_type = annotation_dict[f_path]["Description"]
+        sample_type_files_dict[sample_type].add(txt_file.split('/')[-1])
     # print (sample_type_files_dict['Normal lung ECM (Quantitative detergent solubility profiling)'])
     # count = 0
+    text_file_reader(sample_type_files_dict,base_path,protein_seq_dict)
+
     # sample_type_psm_dict = json.load(open('F:/matrisomedb2.0/sample_protein_psm_dict_3.json','r'))
     # all_prot_psm_dict = defaultdict(list)
     # for samp in sample_type_psm_dict:
