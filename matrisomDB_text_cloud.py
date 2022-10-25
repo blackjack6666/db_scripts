@@ -161,9 +161,11 @@ if __name__=='__main__':
 
     # df = pd.read_excel(r'F:\matrisomedb2.0/Abstracts for Word Cloud.xlsx')
     df = pd.read_excel(r'C:\Users\gao lab computer\Downloads/wc_clean (1).xlsx')
-    project_ids = ['MSV000080124','MSV000078535']
+    project_ids = ['MSV000080124','MSV000078535','PXD020187']
 
-    gen_wordcloud_md2(project_ids,df)
+    for project, text in zip(df['PXD'],df['Abstract']):
+        print ('"""'+project+'"""', ':', '"""'+text+'""",')
+    # gen_wordcloud_md2(project_ids,df)
 
 
     # list_str = df['Abstract'].tolist()
