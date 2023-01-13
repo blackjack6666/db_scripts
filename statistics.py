@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 ## sequence coverage calculation
-
+"""
 matrix_info_dict = json.load(open('F:/matrisomedb2.0/annotation/mat_dict.json'))
 protein_info_dict = protein_info_from_fasta('F:/matrisomedb2.0/mat.fasta')
 matrix_protein_dict = fasta_reader('F:/matrisomedb2.0/mat.fasta')
@@ -31,7 +31,7 @@ for prot in global_prot_freq_dict:
     df.loc[prot, 'Sub'] = sub_cate
     df.loc[prot, 'Sequence coverage'] = seq_cov
 df.to_csv('F:/matrisomedb2_0_revise/statistics/glob_seq_coverage_result9.tsv', sep='\t')
-
+"""
 # gene numbers each category
 """
 df = pd.read_csv('F:/matrisomedb2.0/statistics/glob_seq_coverage.tsv',delimiter='\t',index_col=0)
@@ -193,3 +193,13 @@ plt.tight_layout()
 plt.savefig('F:/matrisomedb2.0/statistics/all_seq_cov.png', dpi=300)
 # plt.show()
 """
+
+## plot ecm coverage in different samples
+df = pd.read_csv('F:/matrisomedb2.0/statistics/sample_seq_cov.tsv', sep='\t').sort_values(by='average seq cov%', ascending=False)
+df = df.iloc[:20, :] # top 20 coverage
+fig, ax = plt.subplots(figsize=(8,10))
+sns.barplot(data=df,x='sample types', y='average seq cov%',ax=ax)
+ax.tick_params(axis='x', which='minor', labelsize=10)
+plt.xticks(rotation=90)
+plt.savefig('F:/matrisomedb2.0/statistics/sample_top20_seq_cov.png',dpi=300,bbox_inches='tight')
+# plt.show()
